@@ -1,0 +1,56 @@
+/* Identidade WooDROP: verde Caparaó + azul, degradê na barra superior, destaque amarelo. */
+:root { --wd-green:#2E7D32; --wd-green-dark:#256628; --wd-blue:#1565C0; --wd-bg:#F3F6F4; --wd-line:#dde5df; --wd-muted:#5b6b61; --wd-soft:#e8f0ea; }
+body { background:var(--wd-bg); }
+a { color:var(--wd-blue); }
+:focus-visible { outline:3px solid #ffb300; outline-offset:2px; }
+
+/* Barra superior, hero e rodapé */
+.wd-nav { background:linear-gradient(90deg,var(--wd-green),var(--wd-blue)); }
+.wd-hero { background:linear-gradient(135deg,var(--wd-green),var(--wd-blue)); }
+.wd-footer { background:#fff; border-top:1px solid var(--wd-line); }
+.wd-menu-btn { line-height:1; padding:.3rem .5rem; }
+
+/* Menu lateral */
+.wd-sidebar-inner { position:sticky; top:4.25rem; }
+.wd-link { color:#333; border-radius:.5rem; padding:.55rem .75rem; display:flex; align-items:center; }
+.wd-link:hover { background:var(--wd-soft); color:#1f2a24; }
+.wd-link.active { background:var(--wd-green); color:#fff; }
+.wd-link .badge { font-size:.65rem; }
+
+/* Cartões e tabelas */
+.card { border-color:var(--wd-line); box-shadow:0 1px 2px rgba(16,40,24,.05); }
+.table > thead th { font-size:.78rem; text-transform:uppercase; letter-spacing:.03em; color:var(--wd-muted); background:#f8faf9; font-weight:600; white-space:nowrap; }
+.table > :not(caption) > * > * { padding:.65rem .75rem; }
+@media (max-width:575.98px) { .table > :not(caption) > * > * { padding:.55rem .5rem; } }
+
+/* Indicadores do painel */
+.wd-stat { border-left:4px solid var(--wd-green); transition:transform .12s ease, box-shadow .12s ease; }
+.wd-stat.border-danger { border-left-color:#dc3545; }
+.wd-stat.wd-click:hover { transform:translateY(-2px); box-shadow:0 .4rem 1rem rgba(16,40,24,.08); }
+.wd-stat-icon { width:2.5rem; height:2.5rem; border-radius:.75rem; display:inline-flex; align-items:center; justify-content:center; background:var(--wd-soft); color:var(--wd-green); font-size:1.2rem; }
+.wd-stat.border-danger .wd-stat-icon { background:#fdecee; color:#dc3545; }
+.wd-stat-num { font-size:1.9rem; font-weight:600; line-height:1.1; }
+
+/* Passos e estados vazios */
+.wd-step { display:flex; gap:.75rem; align-items:flex-start; padding:.75rem 0; border-bottom:1px dashed var(--wd-line); }
+.wd-step:last-child { border-bottom:0; }
+.wd-step-mark { flex:0 0 1.75rem; height:1.75rem; border-radius:50%; display:inline-flex; align-items:center; justify-content:center; font-weight:600; font-size:.85rem; background:var(--wd-soft); color:var(--wd-green); }
+.wd-step.done .wd-step-mark { background:var(--wd-green); color:#fff; }
+.wd-empty { text-align:center; color:var(--wd-muted); padding:2rem 1rem; }
+.wd-empty .bi { font-size:2rem; display:block; margin-bottom:.5rem; color:#a9b8ae; }
+
+/* Produtos */
+.wd-thumb { width:36px; height:36px; object-fit:cover; border-radius:.4rem; }
+.wd-cover { height:160px; object-fit:cover; }
+.wd-cover-empty { height:110px; display:flex; align-items:center; justify-content:center; background:var(--wd-soft); color:#9bb3a3; font-size:2.25rem; border-top-left-radius:inherit; border-top-right-radius:inherit; }
+.wd-preview { max-height:120px; border-radius:.5rem; border:1px solid var(--wd-line); }
+
+/* Planos */
+.wd-plan-popular { position:relative; }
+.wd-plan-popular .wd-ribbon { position:absolute; top:-.7rem; left:50%; transform:translateX(-50%); }
+
+/* Botão principal no verde da marca, inclusive nos estados */
+.btn-success { --bs-btn-bg:var(--wd-green); --bs-btn-border-color:var(--wd-green); --bs-btn-hover-bg:var(--wd-green-dark); --bs-btn-hover-border-color:var(--wd-green-dark);
+  --bs-btn-active-bg:var(--wd-green-dark); --bs-btn-active-border-color:var(--wd-green-dark); --bs-btn-disabled-bg:var(--wd-green); --bs-btn-disabled-border-color:var(--wd-green); }
+.btn-outline-success { --bs-btn-color:var(--wd-green); --bs-btn-border-color:var(--wd-green); --bs-btn-hover-bg:var(--wd-green); --bs-btn-hover-border-color:var(--wd-green); --bs-btn-active-bg:var(--wd-green-dark); }
+.text-success { color:var(--wd-green) !important; }

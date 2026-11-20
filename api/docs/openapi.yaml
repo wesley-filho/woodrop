@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: WooDROP API
+  version: "1.0.0"
+  description: |
+    API REST da plataforma WooDROP (dropshipping regional — Caparaó/ES).
+    Autenticação: `Authorization: Bearer <api_key>` ou `X-API-Key: <api_key>` (RN02).
+    Todas as respostas seguem o formato `{ "success": bool, "data": {}, "message": "" }`.
+    A WooDROP não se responsabiliza por logística/consumidor final (RN09).
+servers:
+  - url: /api/v1
+security:
+  - bearerAuth: []
+paths:
+  /auth/login:
+    post:
+      summary: Autenticar e obter uma API Key (exibida uma única vez)
+      security: []
+      requestBody:
+        required: true
+        content: { application/json: { schema: { type: object, required: [email, senha], properties: { email: { type: string }, senha: { type: string } } } } }
+      responses:
+        "200": { description: Autenticado; retorna data.api_key }
+        "401": { description: Credenciais inválidas }
+        "429": { description: Muitas tentativas }
+  /products:
+    get:
+      summary: Listar catálogo (vendedor - fornecedores com vínculo aprovado; fornecedor - seus produtos)
+      responses: { "200": { description: Lista de produtos }, "401": { description: API Key inválida }, "402": { description: Assinatura inativa (RN06) } }
+  /products/{id}:
+    get:
+      summary: Detalhes de produto (preço e estoque)
+      parameters: [ { $ref: "#/components/parameters/id" } ]
+      responses: { "200": { description: Produto }, "404": { description: Não encontrado } }
+  /orders:
+    get:
+      summary: Listar pedidos do usuário autenticado
+      responses: { "200": { description: Lista de pedidos } }
+    post:
+      summary: Enviar pedido (loja do vendedor -> WooDROP). Valida RN01. Notifica o fornecedor (RF07)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [produto_id, quantidade, cliente_nome, cliente_endereco, cliente_cidade, cliente_estado, cliente_cep]
+              properties:
+                produto_id: { type: integer }
+                quantidade: { type: integer, minimum: 1 }
+                cliente_nome: { type: string }
+                cliente_endereco: { type: string }
+                cliente_cidade: { type: string }
+                cliente_estado: { type: string, minLength: 2, maxLength: 2 }
+                cliente_cep: { type: string }
+                cliente_telefone: { type: string }
+                observacoes: { type: string }
+      responses: { "201": { description: Pedido criado }, "422": { description: Validação / RN01 } }
+  /orders/{id}:
+    get:
+      summary: Consultar status do pedido
+      parameters: [ { $ref: "#/components/parameters/id" } ]
+      responses: { "200": { description: Pedido }, "404": { description: Não encontrado } }
+  /orders/{id}/status:
+    patch:
+      summary: Atualizar status (fornecedor). Confirmar (recebido -> em_separacao) baixa o estoque (RN05); estoque crítico exige 2ª etapa (RN08)
+      parameters: [ { $ref: "#/components/parameters/id" } ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [status]
+              properties:
+                status: { type: string, enum: [em_separacao, enviado, entregue, cancelado] }
+                codigo_rastreio: { type: string }
+                confirmar_critico: { type: boolean, description: "RN08 - confirmação da 2ª etapa" }
+      responses: { "200": { description: Atualizado }, "403": { description: Apenas fornecedor }, "409": { description: Requer 2ª etapa (RN08) }, "422": { description: Transição inválida } }
+  /stock/{product_id}:
+    get:
+      summary: Estoque em tempo real
+      parameters: [ { name: product_id, in: path, required: true, schema: { type: integer } } ]
+      responses: { "200": { description: Estoque atual, mínimo e alerta }, "404": { description: Não encontrado } }
+  /links/request:
+    post:
+      summary: Solicitar vínculo com fornecedor (vendedor)
+      requestBody: { required: true, content: { application/json: { schema: { type: object, required: [fornecedor_id], properties: { fornecedor_id: { type: integer } } } } } }
+      responses: { "201": { description: Solicitação enviada }, "422": { description: Inválida/duplicada } }
+  /links:
+    get:
+      summary: Listar vínculos
+      responses: { "200": { description: Lista de vínculos } }
+components:
+  securitySchemes:
+    bearerAuth: { type: http, scheme: bearer, description: "API Key de 64 caracteres hexadecimais" }
+  parameters:
+    id: { name: id, in: path, required: true, schema: { type: integer } }

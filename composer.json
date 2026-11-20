@@ -1,0 +1,7 @@
+{
+  "name": "woodrop/plataforma",
+  "description": "WooDROP - Conexão entre empresas locais do Caparaó e o mercado on-line (dropshipping regional)",
+  "type": "project",
+  "require": { "php": ">=8.0", "ext-pdo": "*", "ext-curl": "*" },
+  "license": "proprietary"
+}
